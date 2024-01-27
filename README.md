@@ -68,12 +68,6 @@ Evaluates the RandomForestClassifier model on the test dataset. It outputs the a
 ### `train_decision_tree.py`, `train_neural_network.py`, `train_random_forest.py`
 These scripts are responsible for training different types of models. They handle the entire training process, including data loading, model fitting, and saving the trained model.
 
-### Data Exploration Scripts
-The `data_exploration.py` script offers a deep dive into the training data, providing visualizations for a better understanding of the underlying patterns and distributions.
-
-### Feature Extraction
-The `feature_extraction.py` script performs a comprehensive extraction of features from PE files, crucial for machine learning analysis.
-
 ## License
 Apache-2.0
 
