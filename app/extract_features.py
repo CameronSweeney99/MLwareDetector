@@ -233,13 +233,3 @@ def predict(model, file_path):
     else:
         return "Error processing file"
 
-#if __name__ == "__main__":
-    #model_path = 'malware_detector.joblib'  # Update this path
-    #file_path = 'E:/combined_dataset/onefile/Notepad++/notepad++.exe'  # Update this path
-
-    #model = load_model(model_path)
-    #prediction = predict(model, file_path)
-    #print(f'Prediction for {file_path}: {prediction}')
-
-#E:/combined_dataset/onefile/benign/benign_00035.exe
-#E:/combined_dataset/onefile/malware/malware_00001.exe
