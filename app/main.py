@@ -27,7 +27,7 @@ class MLwareDetectorApp(TkinterDnD.Tk):
         self.status_label = tk.Label(self.main_frame, text="", font=("Arial", 12), bg='#2a2a2e', fg='white')
         self.status_label.pack(pady=20)
 
-        # Enable drag and drop
+    
         self.drop_target_register(DND_FILES)
         self.dnd_bind('<<Drop>>', self.drop)
 

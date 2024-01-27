@@ -4,12 +4,12 @@ MLwareDetector is a malware detection application developed in Python. It utiliz
 
 ## Features
 
-- **Machine Learning Model**: Utilizes a RandomForestClassifier model trained on extensive malware and benign datasets.
-- **Feature Extraction**: Implements feature extraction from PE (Portable Executable) files.
-- **Graphical User Interface**: Built with Tkinter, providing a simple and intuitive interface.
-- **Drag and Drop**: Users can drag files directly onto the application to initiate scanning.
-- **File Upload**: Traditional file upload option is also available.
-- **Data Exploration**: Includes a script for exploring the dataset, helping in understanding data distribution and feature importance.
+- **Intuitive GUI**: The application includes a user-friendly graphical interface that supports both traditional file upload and drag-and-drop functionalities for scanning files.
+- **Robust ML Model**: Employs a RandomForestClassifier model, providing high accuracy in distinguishing between malware and benign files.
+- **Feature Extraction**: Utilizes the `feature_extraction.py` script to extract meaningful attributes from PE files which are critical for machine learning model training.
+- **Data Exploration**: Comes with a `data_exploration.py` script that offers insights into the dataset through visualizations of feature distributions and class imbalances.
+- **Versatile Model Training**: Incorporates different training scripts (`train_decision_tree.py`, `train_neural_network.py`, etc.) for experimenting with various machine learning algorithms.
+- **Comprehensive Evaluation**: Uses `test_random_forest.py` and other test scripts to assess the performance of models using metrics like accuracy, ROC curve, and confusion matrix.
 
 ## Installation
 
@@ -26,7 +26,6 @@ pip install -r requirements.txt
 Navigate to the app directory and run the main script:
 
 ```bash
-Copy code
 cd app
 python main.py
 ```
@@ -37,7 +36,7 @@ Drag and drop a .exe file onto the application window.
 Click the 'Upload File' button and select a .exe file from your file system.
 After file selection, the application will display the prediction result indicating whether the file is 'Malicious' or 'Benign'.
 
-### Feature Extraction
+## Feature Extraction
 The extract_features.py script processes PE files to extract various features, including:
 
 Binary properties like presence of resources, TLS, debug information.
@@ -45,14 +44,35 @@ Byte histograms and entropy of the file content.
 Import characteristics, including specific DLLs and functions used.
 Section details like size, entropy, and virtual size ratios.
 Data Exploration
-The data exploration script (data_exploration.py) is designed to analyze the datasets used for training the model. It provides insights into class distributions, missing values, and key feature statistics.
+The data exploration script (`data_exploration.py`) is designed to analyze the datasets used for training the model. It provides insights into class distributions, missing values, and key feature statistics.
 
 ## Development
-This project includes separate modules for different functionalities:
 
-extract_features.py: Handles the extraction of features from PE files.
-load_detector.py: Manages loading the pre-trained machine learning model and making predictions.
-main.py: The main application script with GUI components.
+This section details the various components and their functionalities within the MLwareDetector project.
+
+### `explore_data.py`
+This script performs exploratory data analysis on the datasets. It visualizes missing values, class distributions, and feature distributions to provide insights into the data used for training the models.
+
+### `feature_extraction.py`
+Processes PE files to extract several features, including binary properties, byte histograms, import characteristics, section details, and more. These features are pivotal for the machine learning model to make accurate predictions.
+
+### `model_selection.py`
+Compares different machine learning models using cross-validation. It helps in selecting the best model based on performance metrics like ROC-AUC scores.
+
+### `split_data.py`
+Splits the dataset into training, validation, and test sets. It ensures that the models are evaluated on an independent test set that was not seen during the training phase.
+
+### `test_random_forest.py`
+Evaluates the RandomForestClassifier model on the test dataset. It outputs the accuracy, classification report, and plots the confusion matrix.
+
+### `train_decision_tree.py`, `train_neural_network.py`, `train_random_forest.py`
+These scripts are responsible for training different types of models. They handle the entire training process, including data loading, model fitting, and saving the trained model.
+
+### Data Exploration Scripts
+The `data_exploration.py` script offers a deep dive into the training data, providing visualizations for a better understanding of the underlying patterns and distributions.
+
+### Feature Extraction
+The `feature_extraction.py` script performs a comprehensive extraction of features from PE files, crucial for machine learning analysis.
 
 ## License
 Apache-2.0
