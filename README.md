@@ -22,21 +22,21 @@ Install the necessary Python packages using pip:
 ---bash
 pip install -r requirements.txt
 
-Running the Application
+#### Running the Application
 Navigate to the app directory and run the main script:
 
 ---bash
 Copy code
 cd app
 python main.py
-Usage
+##### Usage
 Upon launching MLwareDetector, you can either:
 
 Drag and drop a .exe file onto the application window.
 Click the 'Upload File' button and select a .exe file from your file system.
 After file selection, the application will display the prediction result indicating whether the file is 'Malicious' or 'Benign'.
 
-Feature Extraction
+##### Feature Extraction
 The extract_features.py script processes PE files to extract various features, including:
 
 Binary properties like presence of resources, TLS, debug information.
@@ -46,15 +46,15 @@ Section details like size, entropy, and virtual size ratios.
 Data Exploration
 The data exploration script (data_exploration.py) is designed to analyze the datasets used for training the model. It provides insights into class distributions, missing values, and key feature statistics.
 
-Development
+###### Development
 This project includes separate modules for different functionalities:
 
 extract_features.py: Handles the extraction of features from PE files.
 load_detector.py: Manages loading the pre-trained machine learning model and making predictions.
 main.py: The main application script with GUI components.
 
-License
+####### License
 Apache-2.0
 
-Contact
+######## Contact
 For any queries regarding MLwareDetector, please reach out via GitHub issues.
