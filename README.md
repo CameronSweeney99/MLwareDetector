@@ -19,16 +19,17 @@ To run MLwareDetector, you need to have Python installed on your system. You can
 
 Install the necessary Python packages using pip:
 
----bash
+```bash
 pip install -r requirements.txt
-
-## Running the Application
+```
+### Running the Application
 Navigate to the app directory and run the main script:
 
----bash
+```bash
 Copy code
 cd app
 python main.py
+```
 ### Usage
 Upon launching MLwareDetector, you can either:
 
