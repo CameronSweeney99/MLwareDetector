@@ -242,3 +242,10 @@ def predict(model, file_path):
     else:
         return "Error processing file"
 
+def get_feature_names():
+    feature_names = properties + \
+                    [f'byte_{i}' for i in range(256)] + \
+                    libraries + \
+                    [f'entry_raw_{i}' for i in range(64)] + \
+                    ['sections_count', 'sections_entropy', 'sections_size', 'sections_virtual_size', 'virtual_size_ratio']
+    return feature_names
