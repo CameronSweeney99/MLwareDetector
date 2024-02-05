@@ -1,6 +1,7 @@
 import tkinter as tk
-from tkinter import filedialog, messagebox
+from tkinter import filedialog, messagebox, PhotoImage
 from tkinterdnd2 import DND_FILES, TkinterDnD
+from PIL import Image, ImageTk
 import joblib
 import extract_features
 import numpy as np
@@ -9,25 +10,32 @@ class MLwareDetectorApp(TkinterDnD.Tk):
     def __init__(self):
         super().__init__()
         self.title('MLwareDetector')
-        self.geometry('500x300') 
-        self.configure(bg='#2a2a2e')
+        self.geometry('800x500')
+        self.configure(bg='#f0f0f0')
+
+        self.iconbitmap('V1_Symbol.ico')
+        # Load the logo image using PIL
+        pil_image = Image.open('V1_Colour.png')
+        # Resize the image using the PIL.Image.Resampling.LANCZOS filter for better quality
+        pil_image = pil_image.resize((200, 200), Image.Resampling.LANCZOS)  # Adjust the size (100, 100) as needed
+        self.logo_image = ImageTk.PhotoImage(pil_image)
 
         self.create_widgets()
 
     def create_widgets(self):
-        self.main_frame = tk.Frame(self, bg='#2a2a2e')
+        self.main_frame = tk.Frame(self, bg='#f0f0f0')  # Changed to very light grey
         self.main_frame.pack(expand=True, fill='both', padx=20, pady=20)
 
-        self.label = tk.Label(self.main_frame, text="MLwareDetector", font=("Arial", 20, "bold"), bg='#2a2a2e', fg='white')
-        self.label.pack(pady=20)
+        # Create a label for the logo image
+        self.logo_label = tk.Label(self.main_frame, image=self.logo_image, bg='#f0f0f0')  # Changed to very light grey
+        self.logo_label.pack(pady=20)
 
         self.upload_button = tk.Button(self.main_frame, text='Upload File', command=self.select_file, bg='#4a7abc', fg='white', font=("Arial", 12))
         self.upload_button.pack(pady=10)
 
-        self.status_label = tk.Label(self.main_frame, text="", font=("Arial", 12), bg='#2a2a2e', fg='white')
+        self.status_label = tk.Label(self.main_frame, text="", font=("Arial", 12), bg='#f0f0f0', fg='black')  # Changed to very light grey and text to black for contrast
         self.status_label.pack(pady=20)
 
-    
         self.drop_target_register(DND_FILES)
         self.dnd_bind('<<Drop>>', self.drop)
 
