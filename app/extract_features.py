@@ -1,4 +1,4 @@
-#load_detector.py
+#extract_features.py
 import lief
 import numpy as np
 import os
@@ -150,9 +150,18 @@ libraries = [
 "wtsapi32",
 ]
 
-def calculate_byte_histogram(file_content):
-    byte_histogram = np.bincount(np.frombuffer(file_content, dtype=np.uint8), minlength=256)
-    total_bytes = len(file_content)
+def calculate_byte_histogram(file_path, chunk_size=8192):
+    byte_histogram = np.zeros(256, dtype=np.int64)
+    total_bytes = 0
+
+    with open(file_path, 'rb') as file:
+        while True:
+            chunk = file.read(chunk_size)
+            if not chunk:
+                break
+            total_bytes += len(chunk)
+            byte_histogram += np.bincount(np.frombuffer(chunk, dtype=np.uint8), minlength=256)
+
     return byte_histogram / total_bytes if total_bytes > 0 else np.zeros(256)
 
 # Function to encode libraries from a PE file
@@ -201,7 +210,7 @@ def encode_pe_file(file_path):
     # Encode byte histogram
     with open(file_path, 'rb') as file:
         file_content = file.read()
-    byte_histogram = calculate_byte_histogram(file_content)
+    byte_histogram = calculate_byte_histogram(file_path)
     features.extend(byte_histogram)
 
     # Encode imported libraries
