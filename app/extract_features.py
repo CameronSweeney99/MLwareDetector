@@ -5,6 +5,7 @@ import os
 import csv
 import joblib
 
+# Define properties that will be checked in the PE file
 properties = [
     'has_configuration',
     'has_debug',
@@ -17,6 +18,8 @@ properties = [
     'has_rich_header',
     'has_tls'
 ]
+
+# List of common libraries to check against in the PE file's import table
 libraries = [
 "*invalid*",
 "ace",
@@ -150,6 +153,7 @@ libraries = [
 "wtsapi32",
 ]
 
+# Function to calculate a byte histogram of a file
 def calculate_byte_histogram(file_path, chunk_size=8192):
     byte_histogram = np.zeros(256, dtype=np.int64)
     total_bytes = 0
@@ -241,7 +245,8 @@ def predict(model, file_path):
         return model.predict(features)[0]  # Return the prediction
     else:
         return "Error processing file"
-
+    
+# Function to get feature names for feature interpretation
 def get_feature_names():
     feature_names = properties + \
                     [f'byte_{i}' for i in range(256)] + \

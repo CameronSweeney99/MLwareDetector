@@ -10,14 +10,16 @@ import seaborn as sns
 import numpy as np
 import time
 
+# Function to load data from CSV files
 def load_data(filename):
     print(f"Loading data from {filename}...")
     data = pd.read_csv(filename)
-    X = data.iloc[:, :-1]  
-    y = data.iloc[:, -1].map({'benign': 0, 'malware': 1}) 
+    X = data.iloc[:, :-1]  # Features: All columns except the last one
+    y = data.iloc[:, -1].map({'benign': 0, 'malware': 1})  # Target: Mapping text labels to binary values
     print("Data loaded successfully.")
     return X, y
 
+# Function to plot confusion matrices
 def plot_confusion_matrix(cm, classes, plot_directory, title, dataset_name):
     plt.figure(figsize=(8, 6))
     sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=classes, yticklabels=classes)
@@ -27,6 +29,7 @@ def plot_confusion_matrix(cm, classes, plot_directory, title, dataset_name):
     plt.savefig(f'{plot_directory}/confusion_matrix_{dataset_name}.png')
     plt.show()
 
+# Function to plot top feature importances from the model
 def plot_top_feature_importances(model, columns, top_n=20, plot_directory='../plots/random_forrest'):
     importances = model.feature_importances_
     indices = np.argsort(importances)[-top_n:]
@@ -39,24 +42,28 @@ def plot_top_feature_importances(model, columns, top_n=20, plot_directory='../pl
     plt.savefig(f'{plot_directory}/top_features.png')
     plt.show()
 
+# Main function to perform model training, evaluation, and plotting
 def main():
     start_time = time.time()
+
+    # Load data from CSV files
     X_train, y_train = load_data('../data/training_extracted_features.csv')
     X_val, y_val = load_data('../data/validation_extracted_features.csv')
     X_test, y_test = load_data('../data/test_extracted_features.csv')
 
+    # Initialize RandomForest model
     model = RandomForestClassifier(n_estimators=100, random_state=42, oob_score=True)
     model.fit(X_train, y_train)
 
-    # Cross-validation
+    # Cross-validation to evaluate the model
     cv_scores = cross_val_score(model, X_val, y_val, cv=5)
     print(f"Cross-validation scores: {cv_scores}")
     print(f"Average cross-validation score: {cv_scores.mean()}")
 
-    # OOB Score
+    # Out-of-bag (OOB) Score
     print("OOB Score:", model.oob_score_)
 
-    # Confusion Matrices for each dataset
+    # Confusion matrices for training, validation, and test datasets
     cm_train = confusion_matrix(y_train, model.predict(X_train))
     plot_confusion_matrix(cm_train, ['Benign', 'Malware'], '../plots/random_forrest', 'Confusion Matrix', 'Training')
 
@@ -66,10 +73,10 @@ def main():
     cm_test = confusion_matrix(y_test, model.predict(X_test))
     plot_confusion_matrix(cm_test, ['Benign', 'Malware'], '../plots/random_forrest', 'Confusion Matrix', 'Test')
 
-    # Feature importances
+    # Plotting top feature importances
     plot_top_feature_importances(model, X_train.columns, top_n=20)
 
-    # Permutation Feature Importance
+    # Permutation feature importance
     result = permutation_importance(model, X_val, y_val, n_repeats=10, random_state=42)
     sorted_idx = result.importances_mean.argsort()
     plt.figure(figsize=(12, 8))
@@ -79,6 +86,7 @@ def main():
     plt.savefig('../plots/random_forrest/permutation_importances.png')
     plt.show()
 
+    # Save the trained model
     dump(model, '../models/random_forest.joblib')
     print("Model saved in '../models/random_forest.joblib'")
 

@@ -1,3 +1,4 @@
+#main.py
 import tkinter as tk
 from tkinter import filedialog, messagebox, PhotoImage
 from tkinterdnd2 import DND_FILES, TkinterDnD
@@ -14,7 +15,7 @@ import shap
 import pandas as pd
 
 class MLwareDetectorApp(TkinterDnD.Tk):
-    
+    # Initialization of the main application window
     def __init__(self):
         super().__init__()
         self.title('MLwareDetector')
@@ -28,11 +29,11 @@ class MLwareDetectorApp(TkinterDnD.Tk):
 
         self.create_widgets()
 
+    # Creates the GUI components
     def create_widgets(self):
         self.main_frame = tk.Frame(self, bg='#f0f0f0')  
         self.main_frame.pack(expand=True, fill='both', padx=20, pady=20)
 
-      
         self.logo_label = tk.Label(self.main_frame, image=self.logo_image, bg='#f0f0f0')  
         self.logo_label.pack(pady=20)
 
@@ -45,16 +46,19 @@ class MLwareDetectorApp(TkinterDnD.Tk):
         self.drop_target_register(DND_FILES)
         self.dnd_bind('<<Drop>>', self.drop)
 
+    # Handles file selection via file dialog
     def select_file(self):
         filename = filedialog.askopenfilename()
         self.process_file(filename)
 
+    # Handles file drop operation
     def drop(self, event):
         if event.data:
             files = self.main_frame.tk.splitlist(event.data)
             for f in files:
                 self.process_file(f)
 
+    # Starts processing the selected file
     def process_file(self, filename):
         if filename:
             self.status_label.config(text=f'Loading file: {filename}')
@@ -62,8 +66,8 @@ class MLwareDetectorApp(TkinterDnD.Tk):
 
             threading.Thread(target=self.scan_file, args=(filename,), daemon=True).start()
 
+    # Computes SHAP values and generates a plot
     def compute_and_plot_shap(self, model, features, filename):
-        # Assuming features is a numpy array; convert it to a DataFrame with column names
         if isinstance(features, np.ndarray):
             features_df = pd.DataFrame(features.reshape(1, -1), columns=get_feature_names())
         else:
@@ -72,32 +76,28 @@ class MLwareDetectorApp(TkinterDnD.Tk):
         explainer = shap.TreeExplainer(model)
         shap_values = explainer.shap_values(features_df)
 
-        # Plotting
         plt.figure()
         shap.summary_plot(shap_values, features_df, show=False)
         plot_path = "shap_summary.png"
         plt.savefig(plot_path)
         plt.close()
 
-        # Display the plot
         self.show_shap_plot(plot_path)
 
+    # Displays the generated SHAP plot
     def show_shap_plot(self, plot_path):
-        # Create a new top-level window
         plot_window = tk.Toplevel(self)
         plot_window.title("SHAP Summary Plot")
 
-        # Load and display the SHAP plot image in the new window
         shap_image = Image.open(plot_path)
         shap_photo = ImageTk.PhotoImage(shap_image)
 
-        # Use a label to display the image
         plot_label = tk.Label(plot_window, image=shap_photo)
         plot_label.pack()
 
-        # Keep a reference to the photo object to prevent it from being garbage collected
         plot_label.image = shap_photo
 
+    # Finalizes the prediction process
     def finalize_prediction(self, filename, model):
         features = extract_features.encode_pe_file(filename)
         if features is not None:
@@ -105,11 +105,11 @@ class MLwareDetectorApp(TkinterDnD.Tk):
             result = model.predict(features)[0]
             prediction_text = "Malware Detected" if result == 1 else "File is Benign"
             self.status_label.config(text=f'Result: {prediction_text}')
-            # Call SHAP computation and plotting method
             self.compute_and_plot_shap(model, features, filename)
         else:
             self.status_label.config(text="Error in feature extraction")
        
+    # Scans the file using the provided model
     def scan_file(self, filename):
         if not os.path.isfile(filename):
             self.status_label.config(text="Error: File does not exist.")
